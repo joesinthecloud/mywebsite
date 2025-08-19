@@ -15,28 +15,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # If you need a custom build (Hugo/Eleventy), do it here and set the artifact path accordingly.
+      # If you use a static generator, build to a folder and set 'path' to that folder.
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
       - name: Upload artifact for Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .   # or your build output folder if you build
+          path: .   # change to your build output folder if you build
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
-        id: pages
+        id: deployment
         uses: actions/deploy-pages@v4
 
       - name: Download built site artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-pages
-          path: site   # <-- this 'site/' folder will contain the rendered site
+          name: github-pages     # must match the upload action's default name
+          path: site             # this will contain the rendered site
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
@@ -45,4 +48,4 @@ jobs:
           aws-region: us-east-1
 
       - name: Mirror site to S3 (failover origin)
-        run: aws s3 sync site/ s3://joesinthecloud-mirror/ --delete
+        run: aws s3 sync site/ s3://<joesinthecloud-mirror>/ --delete
