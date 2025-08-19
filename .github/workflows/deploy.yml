@@ -1,0 +1,48 @@
+name: Build & Deploy (Pages + S3 Mirror)
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write   # required for OIDC
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # If you need a custom build (Hugo/Eleventy), do it here and set the artifact path accordingly.
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact for Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .   # or your build output folder if you build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: pages
+        uses: actions/deploy-pages@v4
+
+      - name: Download built site artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: site   # <-- this 'site/' folder will contain the rendered site
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::<949367020370>:role/GitHubActions_S3Mirror
+          aws-region: us-east-1
+
+      - name: Mirror site to S3 (failover origin)
+        run: aws s3 sync site/ s3://joesinthecloud-mirror/ --delete
