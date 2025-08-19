@@ -41,6 +41,27 @@ jobs:
           name: github-pages     # must match the upload action's default name
           path: site             # this will contain the rendered site
 
+      - uses: actions/github-script@v7
+        id: oidc
+        with:
+          script: |
+            const token = await core.getIDToken('sts.amazonaws.com');
+            core.setOutput('token', token);
+      
+      - name: Show OIDC claims (TEMP)
+        run: |
+          python - <<'PY'
+          import os, json, base64
+          tok=os.environ['TOKEN']
+          payload=tok.split('.')[1] + '=='
+          data=json.loads(base64.urlsafe_b64decode(payload).decode())
+          print('aud:', data.get('aud'))
+          print('sub:', data.get('sub'))
+          PY
+        env:
+          TOKEN: ${{ steps.oidc.outputs.token }}
+
+
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
