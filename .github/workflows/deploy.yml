@@ -72,7 +72,7 @@ jobs:
         run: aws s3 sync "site/" "s3://joesinthecloud-mirror/" --delete
   
       - name: Invalidate CloudFront cache
-        run: aws cloudfront create-invalidation --distribution-id <ENRUG2COZMRM7> --paths "/*"
+        run: aws cloudfront create-invalidation --distribution-id ENRUG2COZMRM7 --paths "/*"
       
 
 
