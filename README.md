@@ -25,6 +25,11 @@ Updated automatically on every push through GitHub Actions
 
 🔹 Connect with Me
 
+---
+**Quick Links**  
+[Projects](/projects/) • [Videos](/videos/) • [GitHub](https://github.com/joesinthecloud) • [LinkedIn](#)
+
+
 LinkedIn: linkedin.com/in/joenervisjr
 
 GitHub: @joesinthecloud
