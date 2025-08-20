@@ -1,7 +1,7 @@
 Joe’s Cloud & DevOps Portfolio
 
 Welcome to my personal portfolio site:
-👉 https://joesinthe.cloud
+👉 https://www.joesinthe.cloud
 
 This site highlights projects I’ve worked on while building my skills in Cloud Engineering, DevOps, and Security. Each project includes a short write-up and video summary.
 
@@ -25,7 +25,7 @@ Updated automatically on every push through GitHub Actions
 
 🔹 Connect with Me
 
-LinkedIn: Your Profile
+LinkedIn: linkedin.com/in/joenervisjr
 
 GitHub: @joesinthecloud
 
