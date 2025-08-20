@@ -69,4 +69,4 @@ jobs:
           aws-region: us-east-1
 
       - name: Mirror site to S3 (failover origin)
-        run: aws s3 sync site/ s3://<joesinthecloud-mirror>/ --delete
+        run: aws s3 sync "site/" "s3://joesinthecloud-mirror/" --delete
