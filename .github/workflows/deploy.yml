@@ -9,20 +9,26 @@ permissions:
   pages: write
   id-token: write   # required for OIDC
 
+# Prevent overlapping runs from stepping on each other or double-uploading artifacts
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # If you use a static generator, build to a folder and set 'path' to that folder.
+      # If you add a static site build later (Hugo/Eleventy/etc),
+      # build to ./site and change the upload 'path' to 'site'.
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
       - name: Upload artifact for Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .   # change to your build output folder if you build
+          path: .   # change to your build output folder if you build (e.g., 'site')
 
   deploy:
     needs: build
@@ -35,32 +41,12 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
+      # Download the same artifact so we can mirror it to S3
       - name: Download built site artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-pages     # must match the upload action's default name
-          path: site             # this will contain the rendered site
-
-      - uses: actions/github-script@v7
-        id: oidc
-        with:
-          script: |
-            const token = await core.getIDToken('sts.amazonaws.com');
-            core.setOutput('token', token);
-      
-      - name: Show OIDC claims (TEMP)
-        run: |
-          python - <<'PY'
-          import os, json, base64
-          tok=os.environ['TOKEN']
-          payload=tok.split('.')[1] + '=='
-          data=json.loads(base64.urlsafe_b64decode(payload).decode())
-          print('aud:', data.get('aud'))
-          print('sub:', data.get('sub'))
-          PY
-        env:
-          TOKEN: ${{ steps.oidc.outputs.token }}
-
+          name: github-pages   # default name produced by upload-pages-artifact
+          path: site           # will contain the rendered site
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
@@ -73,6 +59,3 @@ jobs:
 
       - name: Invalidate CloudFront cache
         run: aws cloudfront create-invalidation --distribution-id ENRUG2COZMRM7 --paths "/*"
-
-
-      
