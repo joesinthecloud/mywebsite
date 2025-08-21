@@ -41,7 +41,7 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      # Download the same artifact so we can mirror it to S3
+      # Download the same artifact so we can mirror it to S3 
       - name: Download built site artifact
         uses: actions/download-artifact@v4
         with:
