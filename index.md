@@ -2,6 +2,4 @@
 layout: default
 title: Home
 ---
-
-# Hello from Jekyll 👋
-This is a minimal test page.
+{% include_relative README.md %}
