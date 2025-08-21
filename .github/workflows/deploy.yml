@@ -3,6 +3,7 @@ name: Build & Deploy (Pages + S3 Mirror)
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -19,8 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Build Jekyll site → _site/
-      # Uses the GitHub Pages-approved Jekyll build action
+      # Build Jekyll → _site/
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
@@ -44,14 +44,13 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      # Download the same (built) artifact so we can mirror it to S3
       - name: Download built site artifact
         uses: actions/download-artifact@v4
         with:
           name: github-pages
           path: site
 
-      # The artifact is a tarball; extract it so S3 sync sees real files
+      # Extract the artifact so S3 gets real files (index.html, assets)
       - name: Extract artifact
         run: |
           tar -xf site/artifact.tar -C site
