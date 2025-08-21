@@ -20,29 +20,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Setup Ruby for Jekyll
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.1'
-          bundler-cache: true
-
-      # Install Jekyll and dependencies
-      - name: Install dependencies
-        run: |
-          gem install bundler jekyll
-          bundle init || true
-          bundle add jekyll jekyll-remote-theme
-
-      # Build Jekyll -> _site/
-      - name: Build with Jekyll
-        run: bundle exec jekyll build --destination _site
-
-      # Upload the BUILT site (not source files)
+      # Upload the repo contents directly (must include index.html)
       - name: Upload artifact for Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: .
 
   deploy:
     needs: build
@@ -55,14 +37,12 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      # Download the built artifact
       - name: Download built site artifact
         uses: actions/download-artifact@v4
         with:
           name: github-pages
           path: site
 
-      # Extract the tarball so S3 sync sees real files
       - name: Extract artifact
         run: |
           tar -xf site/artifact.tar -C site
