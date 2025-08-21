@@ -7,9 +7,8 @@ on:
 permissions:
   contents: read
   pages: write
-  id-token: write   # required for OIDC
+  id-token: write
 
-# Prevent overlapping runs from stepping on each other or double-uploading artifacts
 concurrency:
   group: "pages"
   cancel-in-progress: true
@@ -20,15 +19,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # If you add a static site build later (Hugo/Eleventy/etc),
-      # build to ./site and change the upload 'path' to 'site'.
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
+      # Build Jekyll site → _site/
+      # Uses the GitHub Pages-approved Jekyll build action
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: .
+          destination: ./_site
 
+      # Upload the BUILT site (not the source)
       - name: Upload artifact for Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .   # change to your build output folder if you build (e.g., 'site')
+          path: _site
 
   deploy:
     needs: build
@@ -41,12 +44,19 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      # Download the same artifact so we can mirror it to S3 
+      # Download the same (built) artifact so we can mirror it to S3
       - name: Download built site artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-pages   # default name produced by upload-pages-artifact
-          path: site           # will contain the rendered site
+          name: github-pages
+          path: site
+
+      # The artifact is a tarball; extract it so S3 sync sees real files
+      - name: Extract artifact
+        run: |
+          tar -xf site/artifact.tar -C site
+          rm site/artifact.tar
+          ls -la site | head -50
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
