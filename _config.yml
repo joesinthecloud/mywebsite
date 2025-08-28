@@ -1,5 +1,5 @@
 title: "Joe’s Cloud & DevOps Portfolio"
-description: "Resilient static hosting on GitHub Pages + CloudFront + S3 failover"
+description: "Resilient static hosting on GitHub Pages w/ GitHub Actions + CloudFront + S3 failover"
 
 # GitHub Pages–supported remote theme
 remote_theme: pages-themes/cayman@v0.2.0
@@ -10,6 +10,6 @@ plugins:
 markdown: kramdown
 
 # Canonical site settings
-url: "https://joesinthe.cloud"
+url: "https://joesinthecloud.net"
 
 baseurl: ""
