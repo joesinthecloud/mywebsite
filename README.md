@@ -1,4 +1,5 @@
-<h2 align="center">Joe’s Cloud & DevOps Portfolio — Resilient Static Hosting (PoC)</h2>
+<h1 align="center">Joe’s Cloud & DevOps Portfolio</h1>
+<h2 align="center">Resilient Static Hosting (PoC)</h2>
 
 > **Note:** My primary portfolio is hosted at [joesinthe.cloud](https://www.joesinthe.cloud).  
 > This site (**joesinthecloud.net**) is a **proof-of-concept** demonstrating resilient static hosting using **GitHub Pages (primary)**, fronted by **AWS CloudFront** with **S3 failover**, automated via **GitHub Actions** and **OIDC** (no static AWS keys).
