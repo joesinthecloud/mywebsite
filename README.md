@@ -51,6 +51,7 @@ I built a static portfolio site engineered for **high availability** and **secur
 ## 🧩 Key Configurations
 
 ### `_config.yml` (Jekyll)
+
 ```yaml
 title: "Joe’s Cloud & DevOps Portfolio"
 description: "Resilient static hosting on GitHub Pages + CloudFront + S3 failover"
@@ -59,9 +60,8 @@ plugins: [jekyll-remote-theme]
 markdown: kramdown
 url: "https://www.joesinthecloud.net"
 baseurl: ""
+
 GitHub Actions Workflow
-yaml
-Copy code
 name: Build & Deploy (Pages + S3 Mirror)
 
 on:
@@ -118,9 +118,9 @@ jobs:
 
       - name: Invalidate CloudFront
         run: aws cloudfront create-invalidation --distribution-id <DIST_ID> --paths "/*"
+```
 
-
-✅ Validation & Failover Testing
+### ✅ Validation & Failover Testing
 Direct Pages URL should load the site (project path).
 
 CloudFront domain should load the site with index.html.
@@ -129,7 +129,7 @@ Simulate GitHub outage → CloudFront fails over to S3.
 
 Each deploy ends with a CloudFront invalidation so changes appear globally in minutes.
 
-📚 What I Learned
+### 📚 What I Learned
 IAM + OIDC federation → Scoped trust conditions and temporary tokens.
 
 CloudFront origin groups → Primary/secondary with failover codes.
@@ -140,7 +140,7 @@ DNS & TLS → Route 53 delegation + ACM in us-east-1.
 
 Resilience → Tested failover and designed around no single point of failure.
 
-🔗 Quick Links
+### 🔗 Quick Links
 Primary Portfolio: joesinthe.cloud
 
 GitHub: github.com/joesinthecloud
