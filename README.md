@@ -4,7 +4,7 @@
 > **Note:** My primary portfolio is hosted at [joesinthe.cloud](https://www.joesinthe.cloud).  
 > This site (**joesinthecloud.net**) is a **proof-of-concept** designed to demonstrate resilient static hosting using **GitHub Pages (primary)**, fronted by **AWS CloudFront** and **AWS Web Application Firewall (WAF)** with **S3 failover**, and automated with **GitHub Actions + OIDC** (no static AWS keys).
 
-🔗 **Live (PoC):** [https://www.joesinthecloud.net](https://www.joesinthecloud.net)  
+🔗 **Live Static Site Hosted At (DEACTIVATED):** [https://www.joesinthecloud.net](https://www.joesinthecloud.net)  
 🔗 **LinkedIn:** [linkedin.com/in/joenervisjr](https://www.linkedin.com/in/joenervisjr)  
 🔗 **GitHub:** [github.com/joesinthecloud](https://github.com/joesinthecloud)
 
